@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Rooster!</string>
+    <string name="action_settings">Settings</string>
+    <color name="black">#70000000</color>
+    <color name="black2">#000000</color>
+    <color name="white">#95FFFFFF</color>
+    <string-array name="motivation_quote">
+        <item>Clear alcohols are for rich women on diets.</item>
+        <item>Crying: acceptable at funerals and the Grand Canyon.</item>
+        <item>I call this turf ‘n’ turf. It’s a 16 oz T-bone and a 24 oz porterhouse. Also, whiskey and a cigar. I am going to consume all of this at the same time because I am a free American.</item>
+        <item>Under my tutelage, you will grow from boys to men. From men into gladiators. And from gladiators into Swansons.</item>
+        <item>I’m a simple man. I like pretty, dark-haired women, and breakfast food.</item>
+        <item>Never half-ass two things. Whole-ass one thing.</item>
+        <item>Man with hands in pockets feel foolish, Man with hole in pocket feel nuts.</item>
+        <item>Fishing relaxes me. It’s like yoga, except I still get to kill something.</item>
+        <item>Just give me all the bacon and eggs you have. Wait…wait. I worry what you just heard was: Give me a lot of bacon and eggs. What I said was: Give me all the bacon and eggs you have. Do you understand?</item>
+        <item>Learn from yesterday, live for today, hope for tomorrow. The important thing is not to stop questioning.</item>
+        <item>The true sign of intelligence is not knowledge but imagination.</item>
+        <item>Why is it that nobody understands me, yet everybody likes me?</item>
+        <item>There’s only one thing I hate more than lying: skim milk. Which is water that’s lying about being milk.</item>
+        <item>When I eat, it is the food that is scared.</item>
+        <item>If you see me fighting a bear, you better help the bear.</item>
+        <item>That moment when you look so damn good that you feel like not enough people have seen you and you refused to go home.</item>
+        <item>Photo shoot fresh, looking like wealth and I`m about to call the paparrazi on myself.</item>
+        <item>Hate generates more hate, only love generates Peace.</item>
+    </string-array>
+</resources>
