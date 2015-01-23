@@ -1,5 +1,6 @@
 package com.example.laditiarama.helloluigi;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
@@ -19,6 +20,8 @@ import java.util.Random;
 
 public class MainActivity extends ActionBarActivity {
 
+    public static Context context;
+
     // To store current background id
     // App starts off with no background
     public static int currentQuoteIndex = -1;
@@ -28,6 +31,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = this.getApplication().getApplicationContext();
 
         // Loads all drawable resource ids in local memory
         this.loadImages();
