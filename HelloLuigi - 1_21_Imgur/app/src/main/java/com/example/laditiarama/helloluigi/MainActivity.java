@@ -34,6 +34,13 @@ public class MainActivity extends ActionBarActivity {
 
         context = this.getApplication().getApplicationContext();
 
+        //////
+        /*
+        SendGetReqAsyncTask sendGetReqAsyncTask = new SendGetReqAsyncTask();
+        sendGetReqAsyncTask.execute(AppConstants.IMGUR_ACCOUNT, AppConstants.IMGUR_ACCOUNT_ALBUM_ID);
+        */
+        //////
+
         // Loads all drawable resource ids in local memory
         this.loadImages();
 

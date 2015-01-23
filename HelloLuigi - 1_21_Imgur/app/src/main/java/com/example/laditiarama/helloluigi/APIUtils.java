@@ -11,35 +11,39 @@ import java.net.URI;
 
 public class APIUtils {
 
-    private void handleAPIRequest(String account, String albumId) {
+    public static void handleAPIRequest(String account, String albumId) {
         HttpResponse httpResponse = null;
         String errorMessage = null;
         try {
             HttpClient httpClient = new CustomHttpClient();
             HttpGet request = new HttpGet();
-            request.setURI(new URI(AppConstants.IMGUR_API_URL + "account/" + AppConstants.IMGUR_ACCOUNT + "/album/" + AppConstants.IMGUR_ACCOUNT_ALBUM_ID));
-            //request.setHeader("Content-type", "application/json");
+            String endpoint = AppConstants.IMGUR_API_ENDPOINT + "account/" + AppConstants.IMGUR_ACCOUNT + "/album/" + AppConstants.IMGUR_ACCOUNT_ALBUM_ID;
+            Log.i(APIUtils.class.toString(), "API Endpoint: " + endpoint);
+            request.setURI(new URI(endpoint));
+            request.setHeader("Content-type", "application/json");
             request.setHeader("Authorization", "Client-ID " + AppConstants.IMGUR_API_CLIENT_ID);
             httpResponse = httpClient.execute(request);
         }
         catch (Exception ex) {
             errorMessage = ex.getMessage();
-            Log.e("APICalloutUtils", errorMessage);
+            Log.e(APIUtils.class.toString(), Log.getStackTraceString(ex));
         }
         String jsonString = null;
         JSONObject jsonResponseObject = null;
         try {
             jsonString = EntityUtils.toString(httpResponse.getEntity());
-            Log.d("Server JSON response:", jsonString);
+            Log.d(APIUtils.class.toString(), "JSON Response: " + jsonString);
             jsonResponseObject = new JSONObject(jsonString);
         }
         catch (Exception ex) {
             errorMessage = ex.getMessage();
-            Log.e("APICalloutUtils", errorMessage);
+            Log.e(APIUtils.class.toString(), Log.getStackTraceString(ex));
         }
+        /*
         if (errorMessage != null) {
             Utils.alert(errorMessage, "ERROR");
         }
+        */
     }
 
     /*

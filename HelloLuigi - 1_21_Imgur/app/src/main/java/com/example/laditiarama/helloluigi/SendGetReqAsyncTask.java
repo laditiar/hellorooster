@@ -1,22 +1,68 @@
 package com.example.laditiarama.helloluigi;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+
+import java.net.URI;
 
 class SendGetReqAsyncTask extends AsyncTask<String, Void, HttpResponse> {
 
     @Override
     protected HttpResponse doInBackground(String... params) {
-        return null;
+        String account = params[0];
+        String album = params[1];
+        long start = System.currentTimeMillis();
+        HttpResponse httpResponse = null;
+        String errorMessage = null;
+        try {
+            HttpClient httpClient = new CustomHttpClient();
+            HttpGet request = new HttpGet();
+            String endpoint = AppConstants.IMGUR_API_ENDPOINT + "account/" + account + "/album/" + album;
+            Log.i(SendGetReqAsyncTask.class.toString(), "API Endpoint: " + endpoint);
+            request.setURI(new URI(endpoint));
+            request.setHeader("Content-type", "application/json");
+            request.setHeader("Authorization", "Client-ID " + AppConstants.IMGUR_API_CLIENT_ID);
+            httpResponse = httpClient.execute(request);
+            long end = System.currentTimeMillis();
+            Log.i(SendGetReqAsyncTask.class.toString(), "API processing time: " + (end-start) + "ms");
+        }
+        catch (Exception ex) {
+            errorMessage = ex.getMessage();
+            Log.e(SendGetReqAsyncTask.class.toString(), Log.getStackTraceString(ex));
+        }
+        String jsonString = null;
+        JSONObject jsonResponseObject = null;
+        try {
+            jsonString = EntityUtils.toString(httpResponse.getEntity());
+            Log.d(SendGetReqAsyncTask.class.toString(), "JSON Response: " + jsonString);
+            jsonResponseObject = new JSONObject(jsonString);
+        }
+        catch (Exception ex) {
+            errorMessage = ex.getMessage();
+            Log.e(SendGetReqAsyncTask.class.toString(), Log.getStackTraceString(ex));
+        }
+        /*
+        if (errorMessage != null) {
+            Utils.alert(errorMessage, "ERROR");
+        }
+        */
+        return httpResponse;
     }
 
     @Override
     protected void onPreExecute() {
+        Log.i(SendGetReqAsyncTask.class.toString(), "API REQUEST PRE-EXECUTE");
     }
 
     @Override
     protected void onPostExecute(HttpResponse httpResponse) {
+        Log.i(SendGetReqAsyncTask.class.toString(), "API REQUEST POST-EXECUTE");
     }
 
     /*
