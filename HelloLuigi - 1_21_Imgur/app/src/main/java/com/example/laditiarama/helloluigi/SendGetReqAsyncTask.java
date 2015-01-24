@@ -1,5 +1,7 @@
 package com.example.laditiarama.helloluigi;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -7,6 +9,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URI;
@@ -20,6 +23,7 @@ class SendGetReqAsyncTask extends AsyncTask<String, Void, HttpResponse> {
         long start = System.currentTimeMillis();
         HttpResponse httpResponse = null;
         String errorMessage = null;
+        boolean error = false;
         try {
             HttpClient httpClient = new CustomHttpClient();
             HttpGet request = new HttpGet();
@@ -35,24 +39,57 @@ class SendGetReqAsyncTask extends AsyncTask<String, Void, HttpResponse> {
         catch (Exception ex) {
             errorMessage = ex.getMessage();
             Log.e(SendGetReqAsyncTask.class.toString(), Log.getStackTraceString(ex));
+            error = true;
         }
-        String jsonString = null;
-        JSONObject jsonResponseObject = null;
+        if (!error) {
+            String jsonString = null;
+            JSONObject jsonResponseObject = null;
+            try {
+                jsonString = EntityUtils.toString(httpResponse.getEntity());
+                Log.d(SendGetReqAsyncTask.class.toString(), "JSON Response: " + jsonString);
+                jsonResponseObject = new JSONObject(jsonString);
+                if (jsonResponseObject != null) {
+                    boolean success = jsonResponseObject.getBoolean("success");
+                    int status = jsonResponseObject.getInt("status");
+                    // Check first that the JSON response was a success
+                    if (success && status == 200) {
+                        JSONObject dataNode = (JSONObject)jsonResponseObject.get("data");
+                        if (dataNode != null) {
+                            JSONArray images = dataNode.getJSONArray("images");
+                            if (images != null) {
+                                saveImageLinks(images);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) {
+                errorMessage = ex.getMessage();
+                Log.e(SendGetReqAsyncTask.class.toString(), Log.getStackTraceString(ex));
+            }
+        }
+        return httpResponse;
+    }
+
+    private void saveImageLinks(JSONArray images) {
         try {
-            jsonString = EntityUtils.toString(httpResponse.getEntity());
-            Log.d(SendGetReqAsyncTask.class.toString(), "JSON Response: " + jsonString);
-            jsonResponseObject = new JSONObject(jsonString);
+            if (images.length() > 0) {
+                Context context = MainActivity.context;
+                SharedPreferences settings = context.getSharedPreferences("userData", 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putLong("lastFetchTime", System.currentTimeMillis());
+                editor.putInt("imageCount", images.length());
+                for (int i = 0; i < images.length(); ++i) {
+                    JSONObject image = (JSONObject) images.get(i);
+                    String link = image.getString("link");
+                    editor.putString("image" + i + "Link", link);
+                }
+                editor.commit();
+            }
         }
         catch (Exception ex) {
-            errorMessage = ex.getMessage();
             Log.e(SendGetReqAsyncTask.class.toString(), Log.getStackTraceString(ex));
         }
-        /*
-        if (errorMessage != null) {
-            Utils.alert(errorMessage, "ERROR");
-        }
-        */
-        return httpResponse;
     }
 
     @Override
