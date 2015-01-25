@@ -1,9 +1,11 @@
 package com.example.laditiarama.helloluigi;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -23,7 +25,11 @@ class SendGetReqAsyncTask extends AsyncTask<String, Void, HttpResponse> {
     public SendGetReqAsyncTask(MainActivity parent) {
         super();
         this.parent = parent;
-        this.progressDialog = new ProgressDialog(this.parent, ProgressDialog.STYLE_SPINNER);
+        int theme = ProgressDialog.STYLE_SPINNER;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            theme |= AlertDialog.THEME_HOLO_DARK;
+        }
+        this.progressDialog = new ProgressDialog(this.parent, theme);
     }
 
     @Override
