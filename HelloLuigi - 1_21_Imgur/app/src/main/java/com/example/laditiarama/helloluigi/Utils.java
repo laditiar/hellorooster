@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 
 public class Utils {
 
+    public static final String USER_PROFILE = "roosterProfileData";
+
     public static void alert(String message) {
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.context).create();
         alertDialog.setMessage(message);

@@ -1,6 +1,8 @@
 package com.example.laditiarama.helloluigi;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
@@ -28,6 +30,9 @@ public class MainActivity extends ActionBarActivity {
     public static int currentBgId = 0;
     public static ArrayList<Integer> images = new ArrayList<Integer>();
 
+    // Used to store image links (URLs)
+    public static ArrayList<String> imageLinks = new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +40,7 @@ public class MainActivity extends ActionBarActivity {
         context = this.getApplication().getApplicationContext();
 
         //////
-        //SendGetReqAsyncTask sendGetReqAsyncTask = new SendGetReqAsyncTask();
+        //SendGetReqAsyncTask sendGetReqAsyncTask = new SendGetReqAsyncTask(this);
         //sendGetReqAsyncTask.execute(AppConstants.IMGUR_ACCOUNT, AppConstants.IMGUR_ACCOUNT_ALBUM_ID);
         //////
 
@@ -70,6 +75,26 @@ public class MainActivity extends ActionBarActivity {
             imgnum++;
         }
         while (resID!=0);
+    }
+
+    /*
+    Loads saved string image links (URLs) from preference file into ArrayList for later use
+     */
+    private void loadSavedImageLinks() {
+        SharedPreferences settings = getApplicationContext().getSharedPreferences(Utils.USER_PROFILE, Context.MODE_PRIVATE);
+        int imageCount = settings.getInt("imageCount", 0);
+        if (imageCount > 0) {
+            if (imageLinks == null) {
+                imageLinks = new ArrayList<String>();
+            }
+            imageLinks.clear();
+            for (int i = 0; i < imageCount; ++i) {
+                String imageLink = settings.getString("image" + i + "Link", "");
+                if (!"".equals(imageLink)) {
+                    imageLinks.add(imageLink);
+                }
+            }
+        }
     }
 
     /*

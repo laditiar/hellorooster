@@ -1,5 +1,6 @@
 package com.example.laditiarama.helloluigi;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -15,6 +16,15 @@ import org.json.JSONObject;
 import java.net.URI;
 
 class SendGetReqAsyncTask extends AsyncTask<String, Void, HttpResponse> {
+
+    private MainActivity parent = null;
+    private ProgressDialog progressDialog = null;
+
+    public SendGetReqAsyncTask(MainActivity parent) {
+        super();
+        this.parent = parent;
+        this.progressDialog = new ProgressDialog(this.parent, ProgressDialog.STYLE_SPINNER);
+    }
 
     @Override
     protected HttpResponse doInBackground(String... params) {
@@ -75,7 +85,7 @@ class SendGetReqAsyncTask extends AsyncTask<String, Void, HttpResponse> {
         try {
             if (images.length() > 0) {
                 Context context = MainActivity.context;
-                SharedPreferences settings = context.getSharedPreferences("userData", 0);
+                SharedPreferences settings = context.getSharedPreferences(Utils.USER_PROFILE, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putLong("lastFetchTime", System.currentTimeMillis());
                 editor.putInt("imageCount", images.length());
@@ -95,11 +105,17 @@ class SendGetReqAsyncTask extends AsyncTask<String, Void, HttpResponse> {
     @Override
     protected void onPreExecute() {
         Log.i(SendGetReqAsyncTask.class.toString(), "API REQUEST PRE-EXECUTE");
+        progressDialog.setMessage("Loading images...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
     @Override
     protected void onPostExecute(HttpResponse httpResponse) {
         Log.i(SendGetReqAsyncTask.class.toString(), "API REQUEST POST-EXECUTE");
+        if (progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     /*
